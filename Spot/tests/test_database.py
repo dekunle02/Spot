@@ -41,7 +41,6 @@ class NightDisturbanceTestCase(unittest.TestCase):
         }
         self.assertEqual(dist.to_row(), expected_dict)
 
-
 class TimeSheetTestCase(unittest.TestCase):
     
     def setUp(self) -> None:
