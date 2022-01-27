@@ -1,3 +1,4 @@
+appdirs==1.4.4
 APScheduler==3.6.3
 autopep8==1.6.0
 backports.zoneinfo==0.2.1
@@ -20,6 +21,7 @@ grpcio==1.43.0
 grpcio-status==1.43.0
 httplib2==0.20.2
 idna==3.3
+importlib-metadata==4.10.1
 msgpack==1.0.3
 packaging==21.3
 proto-plus==1.19.9
@@ -27,7 +29,9 @@ protobuf==3.19.3
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycodestyle==2.8.0
+pyee==8.2.2
 pyparsing==3.0.7
+pyppeteer==1.0.2
 python-dotenv==0.19.2
 python-telegram-bot==13.10
 pytz==2021.3
@@ -37,7 +41,10 @@ rsa==4.8
 six==1.16.0
 toml==0.10.2
 tornado==6.1
+tqdm==4.62.3
 tzdata==2021.5
 tzlocal==4.1
 uritemplate==4.1.1
 urllib3==1.26.8
+websockets==10.1
+zipp==3.7.0
