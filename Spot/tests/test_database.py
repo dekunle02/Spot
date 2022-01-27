@@ -71,7 +71,7 @@ class TimeSheetTestCase(unittest.TestCase):
             duration='3min',
             reason="a"
         )
-        self.sheet.append_nightDisturbace(dist)
+        self.sheet.append_nightDisturbance(dist)
         
         self.assertEqual(dist, self.sheet.night_disturbances[0])
 

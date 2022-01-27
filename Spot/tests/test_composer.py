@@ -1,9 +1,64 @@
-<!DOCTYPE html>
+import unittest
+from datetime import datetime
+
+from Spot.compose import composer
+from Spot.database.models import User, TimeSheet, NightDisturbance
+
+
+class ComposerTestCase(unittest.TestCase):
+    def setUp(self) -> None:
+        self.html = """     
+<!doctype html>
+<html lang="en">
+<head>
+</head>
+<body>
+</body>
+</html>
+        """
+        self.user = User(
+            id='1',
+            first_name="a",
+            last_name="b",
+            hospital_name="c",
+            signature_file_id="d"
+        )
+
+        start = datetime.fromisoformat("2022-01-26 13:00:00.000")
+        end = datetime.fromisoformat("2022-02-02 13:00:00.000")
+
+        self.timesheet = TimeSheet(
+            user=self.user,
+            shift_start=start,
+            shift_end=end
+        )
+
+        self.timesheet.append_nightDisturbance(NightDisturbance(
+            time=start,
+            duration='3min',
+            reason="a"
+        ))
+        self.timesheet.append_nightDisturbance(NightDisturbance(
+            time=end,
+            duration='4min',
+            reason="b"
+        ))
+
+        return super().setUp()
+
+    """ insertion_func_list = [insert_css, insert_biodata, insert_work_rows,
+                           insert_total_hours, insert_signing_date, insert_night_disturbances, insert_signature]
+  """
+
+    def test_get_html_template(self):
+        """Can get the html from the assets directory"""
+        expected_html_string = """<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter&display=swap">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     XXCSSXX
     <title>Timesheet</title>
 </head>
@@ -12,7 +67,7 @@
     <div class="heading">
         <span class="heading__title">24/7 Timesheet / Night Disturbances Record</span>
         <div class="heading__logo-box">
-            <img src="XXLOGOXX" alt="nes_logo">
+            <img src="https://neshealthcare.co.uk/wp-content/uploads/2018/02/logo.png" alt="nes_logo">
         </div>
     </div>
 
@@ -44,7 +99,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        XXENTRIESXX
+                        XXWORK_ROWSXX
                         <tr>
                             <td colspan="4" align="end" class="minor-bold-text">Total weekly hours</td>
                             <td>XXTOTAL_WEEK_HOURSXX</td>
@@ -100,79 +155,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>XXDIST_DATE_1XX</td>
-                        <td>XXDIST_TIME_1XX</td>
-                        <td>XXDIST_DURATION_1XX</td>
-                        <td>XXDIST_REASON_1XX</td>
-                    </tr>
-                    <tr>
-                        <td>XXDIST_DATE_2XX</td>
-                        <td>XXDIST_TIME_2XX</td>
-                        <td>XXDIST_DURATION_2XX</td>
-                        <td>XXDIST_REASON_2XX</td>
-                    </tr>
-                    <tr>
-                        <td>XXDIST_DATE_3XX</td>
-                        <td>XXDIST_TIME_3XX</td>
-                        <td>XXDIST_DURATION_3XX</td>
-                        <td>XXDIST_REASON_3XX</td>
-                    </tr>
-                    <tr>
-                        <td>XXDIST_DATE_4XX</td>
-                        <td>XXDIST_TIME_4XX</td>
-                        <td>XXDIST_DURATION_4XX</td>
-                        <td>XXDIST_REASON_4XX</td>
-                    </tr>
-                    <tr>
-                        <td>XXDIST_DATE_5XX</td>
-                        <td>XXDIST_TIME_5XX</td>
-                        <td>XXDIST_DURATION_5XX</td>
-                        <td>XXDIST_REASON_5XX</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-
+                    XXDISTURBANCE_ROWSXX
                 </tbody>
             </table>
 
@@ -186,10 +169,9 @@
                     <span> <span class="minor-bold-text">RMO signature:</span>
                         <div class="signature-box">
                             <img src="XXSIGNATUREXX" alt="">
-<!--                            <img src="../database/signature.jpg" alt="">-->
                         </div>
                     </span>
-                    <span> <span class="minor-bold-text">Date: </span>XXTODAY_DATEXX</span>
+                    <span> <span class="minor-bold-text">Date: </span>XXSIGNATURE_DATEXX</span>
                 </div>
             </div>
 
@@ -199,4 +181,150 @@
 </body>
 
 
-</html>
+</html>"""
+        self.assertEqual(expected_html_string, composer.extract_html_string())
+
+    def test_insert_css(self):
+        """css is read from the directory and inserted into a string"""
+        expected_result = """<style>
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+td {
+  height: 3rem;
+}
+
+body {
+  box-sizing: border-box;
+  line-height: 1.7;
+  font-family: "Inter", sans-serif;
+  padding: 5rem 5rem;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.bold-text {
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+.minor-title-text {
+  color: rgba(2, 83, 164, 255);
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+.minor-bold-text {
+  font-weight: 550;
+  font-size: 1.2rem;
+}
+
+/* HEADER */
+.heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.heading__title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: rgba(2, 83, 164, 255);
+}
+
+.heading__logo-box {
+  display: inline-block;
+  /* height: 15rem; */
+  width: 15rem;
+}
+
+/* LAYOUT */
+
+.content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.main-block {
+  width: 40vw;
+}
+
+.side-block {
+  width: 45vw;
+  padding: 0 2rem;
+}
+
+/* BIODATA */
+
+.bio-data {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+}
+
+.bio-data__row {
+  display: flex;
+  padding: 2rem 0;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.timesheet__title-block {
+  padding: 1.5rem 0;
+}
+
+.timesheet__table {
+  margin-right: 2rem;
+}
+
+.timesheet__footer-block {
+  margin: 0 auto;
+  width: 90%;
+  font-weight: 500;
+  font-size: 1.3rem;
+  margin-top: 2rem;
+}
+
+.night-block__heading {
+  padding: 2rem 0;
+}
+
+.night-block__table {
+  margin: 0 2rem;
+}
+
+.declaration-block {
+  margin-top: 2rem;
+}
+
+.declaration-block__signature {
+  display: flex;
+  flex-direction: row;
+  margin: 2rem 0;
+  align-items: center;
+}
+
+.signature-box {
+  display: inline-block;
+  width: 15rem;
+}
+</style>"""
+        self.assertEqual(expected_result, composer.insert_css("XXCSSXX"))
+
+    def test_insert_biodata(self):
+        template = "XXXXFIRST_NAMEXX=XXLAST_NAMEXX=XXHOSPITALXX"
+        expected_result = "a=b=c"
+        self.assertEqual(expected_result, composer.insert_biodata(template, self.user))
+
+    

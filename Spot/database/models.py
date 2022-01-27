@@ -58,7 +58,7 @@ class TimeSheet:
         self.shift_end = shift_end
         self.night_disturbances = []
 
-    def append_nightDisturbace(self, disturbance: NightDisturbance) -> None:
+    def append_nightDisturbance(self, disturbance: NightDisturbance) -> None:
         self.night_disturbances.append(disturbance)
 
     def get_work_rows(self) -> list:
