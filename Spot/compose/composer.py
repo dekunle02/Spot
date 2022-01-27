@@ -1,4 +1,3 @@
-from inspect import signature
 import os
 import re
 import codecs
