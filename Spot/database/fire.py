@@ -1,24 +1,24 @@
 import os
-
+from pathlib import Path
 from dotenv import load_dotenv
 import firebase_admin
 from firebase_admin import credentials, db
 
 from .models import User
 
-
 load_dotenv()
-credentials = credentials.Certificate("firebase_key.json")
-firebase_admin.initialize_app(credentials)
-
+FIREBASE_KEY_DIR = Path(__file__).parents[0]/ 'firebase_key.json'
 DATABASE_URL =  os.environ['FIREBASE_URL']
 USER_PATH = '/users/'
 
+credentials = credentials.Certificate(FIREBASE_KEY_DIR)
+firebase_admin.initialize_app(credentials)
+
+
 db_ref = db.reference(url=DATABASE_URL, path=USER_PATH)
 
-
 def add_user(user: User) -> None:
-    db_ref.push.set(value=user.to_dict())
+    db_ref.push().set(value=user.to_dict())
 
 def get_user_with_id(id: str) -> User:
     user = None
