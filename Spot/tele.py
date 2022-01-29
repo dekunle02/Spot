@@ -84,6 +84,7 @@ def error(update: Update, context: CallbackContext) -> int:
     # Finally, send the message
     context.bot.send_message(chat_id=MY_TELEGRAM_ID, text=f"@{sender.first_name}-{sender.id}\n"+message, parse_mode=ParseMode.HTML)
     update.message.reply_text(text=Replies.ERROR_MESSAGE, parse_mode=ParseMode.HTML)
+    return ConversationHandler.END
 
 def general(update: Update, context: CallbackContext) -> int:
     user = fire.get_user_with_id(update.message.from_user.id)
@@ -394,7 +395,6 @@ def night_prompt(update:Update, context:CallbackContext) -> int:
         return ConversationHandler.END
     
     update.message.reply_text(Replies.DISTURBANCE_DAY_ASK,reply_markup=ReplyKeyboardRemove(),parse_mode=ParseMode.HTML)
-
     return NIGHT_DAY
 
 def night_day(update:Update, context:CallbackContext) -> int:
