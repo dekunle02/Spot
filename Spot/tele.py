@@ -1,4 +1,4 @@
-import os, asyncio
+import os, traceback, html, json
 from datetime import datetime, timedelta
 from socket import timeout
 from dotenv import load_dotenv
@@ -61,20 +61,35 @@ SAM, SAM_MESSAGE = (31, 32)
 General handlers
 """
 def help(update: Update, context: CallbackContext):
-    update.message.reply_text(text= Replies.HELP_MESSAGE)
+    update.message.reply_text(text= Replies.HELP_MESSAGE, parse_mode=ParseMode.HTML)
 
 def error(update: Update, context: CallbackContext) -> int:
     sender = update.message.from_user
-    context.bot.send_message(
-        chat_id=MY_TELEGRAM_ID, 
-        text=f"{update.message.text} sent by @{sender.first_name} id-{sender.id}\nUpdate {update} caused error {context.error}")
-    update.message.reply_text(text=Replies.ERROR_MESSAGE)
+    # traceback.format_exception returns the usual python message about an exception, but as a
+    # list of strings rather than a single string, so we have to join them together.
+    tb_list = traceback.format_exception(None, context.error, context.error.__traceback__)
+    tb_string = ''.join(tb_list)
+
+    # Build the message with some markup and additional information about what happened.
+    # You might need to add some logic to deal with messages longer than the 4096 character limit.
+    update_str = update.to_dict() if isinstance(update, Update) else str(update)
+    message = (
+        f'An exception was raised while handling an update\n'
+        f'<pre>update = {html.escape(json.dumps(update_str, indent=2, ensure_ascii=False))}'
+        '</pre>\n\n'
+        f'<pre>context.chat_data = {html.escape(str(context.chat_data))}</pre>\n\n'
+        f'<pre>context.user_data = {html.escape(str(context.user_data))}</pre>\n\n'
+        f'<pre>{html.escape(tb_string)}</pre>'
+    )
+    # Finally, send the message
+    context.bot.send_message(chat_id=MY_TELEGRAM_ID, text=f"@{sender.first_name}-{sender.id}\n"+message, parse_mode=ParseMode.HTML)
+    update.message.reply_text(text=Replies.ERROR_MESSAGE, parse_mode=ParseMode.HTML)
 
 def general(update: Update, context: CallbackContext) -> int:
     user = fire.get_user_with_id(update.message.from_user.id)
     if user != None:
         update.message.reply_text(
-            "Hello {user.first_name} " + Replies.IDLE_MESSAGE
+            f"Hello {user.first_name} " + Replies.IDLE_MESSAGE
         )
     else:
        update.message.reply_text(
@@ -88,8 +103,8 @@ def cancel(update: Update, context: CallbackContext) -> int:
 def info(update:Update, context: CallbackContext):
     user = fire.get_user_with_id(update.message.from_user.id)
     if user:
-        reply = f"Here you go\n\nFirst name: {user.first_name}\nLast name: {user.last_name}\nHospital:{user.hospital_name}"
-        update.message.reply_text(reply)
+        reply = f"Here you go\n\nFirst name: <b>{user.first_name}</b>\nLast name: <b>{user.last_name}</b>\nHospital: <b>{user.hospital_name}</b>\n"
+        update.message.reply_text(reply, parse_mode=ParseMode.HTML)
     else:
         update.message.reply_text(
             Replies.UNKNOWN_USER_INFO_ASK
@@ -131,14 +146,14 @@ def first_name(update: Update, context: CallbackContext) -> int:
     first_name = update.message.text.strip().capitalize()
     context.user_data['first_name'] = first_name
     update.message.reply_text(
-        text=f"So {first_name}, {Replies.LAST_NAME_ASK}"
+        text=Replies.LAST_NAME_ASK
     )
     return LAST_NAME
 
 def last_name(update: Update, context: CallbackContext) -> int:
     last_name = update.message.text.strip().capitalize()
     context.user_data["last_name"] = last_name
-    update.message.reply_text(text=Replies.HOSPITAL_NAME_ASK, parse_mode=ParseMode.HTML)
+    update.message.reply_text(text=f"So {first_name}, Replies.HOSPITAL_NAME_ASK", parse_mode=ParseMode.HTML)
     return HOSPITAL_NAME
 
 def hospital_name(update: Update, context: CallbackContext) -> int:
@@ -195,7 +210,7 @@ def edit_first_name(update:Update, context:CallbackContext) -> int:
     context.user_data['first_name'] = new_first_name
     update.message.reply_text(text=Replies.EDIT_LAST_NAME_PROMPT,
             reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, input_field_placeholder= f"Type {Options.YES} or {Options.NO}")
-)
+    )
     return LAST_NAME_EDIT_PROMPT
 
 """"""
@@ -321,7 +336,7 @@ def timesheet(update: Update, context: CallbackContext) -> int:
 def timesheet_start_date(update:Update, context:CallbackContext) -> int:
     entered_date = update.message.text
     if not parser.string_is_valid_date(entered_date):
-        update.message.reply_text(text=Replies.DATE_ERROR)
+        update.message.reply_text(text=Replies.DATE_ERROR, parse_mode=ParseMode.HTML)
         return
     context.user_data['start_date'] = entered_date
     update.message.reply_text(Replies.TIME_ASK, quote=False, parse_mode=ParseMode.HTML)
@@ -330,7 +345,7 @@ def timesheet_start_date(update:Update, context:CallbackContext) -> int:
 def timesheet_start_time(update:Update, context:CallbackContext) -> int:
     entered_time = update.message.text
     if not parser.string_is_valid_time(entered_time):
-        update.message.reply_text(text=Replies.TIME_ERROR)
+        update.message.reply_text(text=Replies.TIME_ERROR, parse_mode=ParseMode.HTML)
         return
     context.user_data['start_time'] = entered_time
     update.message.reply_text(Replies.DURATION_ASK, parse_mode=ParseMode.HTML)
@@ -340,7 +355,7 @@ def timesheet_days(update:Update, context:CallbackContext) -> int:
     try:
         context.user_data['day_count'] = int(update.message.text)
     except:
-        update.message.reply_text(Replies.NUMBER_INPUT_ERROR)
+        update.message.reply_text(Replies.NUMBER_INPUT_ERROR, parse_mode=ParseMode.HTML)
         return 
     update.message.reply_text(Replies.END_TIME_ASK, parse_mode=ParseMode.HTML)
     return TIMESHEET_END_TIME
@@ -372,7 +387,6 @@ def night_prompt(update:Update, context:CallbackContext) -> int:
     prompt_answer = update.message.text
     if prompt_answer == Options.NO:
         update.message.reply_text(text=Replies.TIMESHEET_AWAITING_MESSAGE)
-        
         timesheet: models.TimeSheet = context.user_data['timesheet']
         photo_string = composer.get_timesheet_photo(timesheet)
         context.bot.send_photo(chat_id=update.message.from_user.id ,photo=photo_string)

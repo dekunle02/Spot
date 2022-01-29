@@ -66,7 +66,8 @@ class TimeSheet:
         work_rows = []
         start_time = copy.deepcopy(self.shift_start)
         last_time = copy.deepcopy(self.shift_end)
-        midnight = start_time.replace(day=start_time.day+1, minute=0, hour=0, second=0, microsecond=0) 
+        midnight = start_time + timedelta(days=1)
+        midnight = midnight.replace(minute=0, hour=0, second=0, microsecond=0) 
         
         work_rows.append({
             "day" : start_time.strftime("%A"),
