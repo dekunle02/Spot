@@ -8,11 +8,13 @@ from typing import Union
 
 from telegram import Bot, File
 
-from Spot.database.models import TimeSheet, User, NightDisturbance
+from database.models import TimeSheet, User
+from . import painter
 
 load_dotenv()
 HTML_TEMPLATE_DIRECTORY = Path(__file__).parents[1]/'assets' / 'template.html'
 CSS_DIRECTORY = Path(__file__).parents[1]/'assets' / 'styles.css'
+BOOTSTRAP_DIRECTORY = Path(__file__).parents[1]/'assets' / 'bootstrap.css'
 TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
 
 
@@ -46,16 +48,22 @@ def extract_html_string() -> Union[str, None]:
 
 
 def insert_css(template: str, **kwargs) -> str:
+    css_string = ""
+    with codecs.open(str(BOOTSTRAP_DIRECTORY), "r") as f:
+        css_style = f.read()
+        css_string += css_style        
     with codecs.open(str(CSS_DIRECTORY), 'r') as f:
         css_style = f.read()
-        css_string = f"<style>\n{css_style}\n</style>"
-        return replace(template=template, XXCSSXX=css_string)
+        css_string += css_style
+        
+    css_string = f"<style>\n{css_string}\n</style>"
+    return replace(template=template, XXCSSXX=css_string)
 
 
 def insert_biodata(template: str, user: User, **kwargs) -> str:
     return replace(
         template=template,
-        XXXXFIRST_NAMEXX=user.first_name,
+        XXFIRST_NAMEXX=user.first_name,
         XXLAST_NAMEXX=user.last_name,
         XXHOSPITALXX=user.hospital_name
     )
@@ -123,11 +131,11 @@ def insert_signature(template: str, user: User, **kwargs) -> str:
     bot: Bot = Bot(token=TELEGRAM_TOKEN)
     signature_file: File = bot.get_file(file_id=user.signature_file_id)
     signature_byte_array = signature_file.download_as_bytearray()
-    encoded_signature = base64.encode(signature_byte_array)
+    encoded_signature = base64.b64encode(signature_byte_array)
     encoded_signature = (str(encoded_signature))[2:-1]
     return replace(
         template=template,
-        XXSIGNATUREXX="data:image/png;base64, " + signature_byte_array
+        XXSIGNATUREXX="data:image/png;base64, " + encoded_signature
     )
 
 
@@ -138,3 +146,9 @@ def compose_html_with_timesheet(timesheet:TimeSheet, html_string=None) -> str:
     for func in insertion_func_list:
         template = func(template=template, timesheet=timesheet, user=timesheet.user)
     return template
+
+
+def get_timesheet_photo(timesheet: TimeSheet) -> str:
+    html_string = compose_html_with_timesheet(timesheet)
+    photo_string = painter.paint_picture(html_string)
+    return photo_string

@@ -1,7 +1,7 @@
 import unittest
 from datetime import datetime
 
-from Spot.compose import composer
+from Spot.controller import composer
 from Spot.database.models import User, TimeSheet, NightDisturbance
 
 
@@ -21,7 +21,7 @@ class ComposerTestCase(unittest.TestCase):
             first_name="a",
             last_name="b",
             hospital_name="c",
-            signature_file_id="d"
+            signature_file_id="AgACAgQAAxkBAAIBBGHzPvXzYTCRvtn4kHAZOCrCSBgVAALntTEb98WZUxgTkUZfB6RuAQADAgADeAADIwQ"
         )
 
         start = datetime.fromisoformat("2022-01-26 13:00:00.000")
@@ -327,4 +327,8 @@ img {
         expected_result = "a=b=c"
         self.assertEqual(expected_result, composer.insert_biodata(template, self.user))
 
-    
+
+    def test_timesheet_photo_generation(self):
+      """TImesheet actually generatred"""
+      ph = composer.get_timesheet_photo(self.timesheet)
+      print(ph)

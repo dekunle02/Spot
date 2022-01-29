@@ -6,6 +6,7 @@ from firebase_admin import credentials, db
 
 from .models import User
 
+
 load_dotenv()
 FIREBASE_KEY_DIR = Path(__file__).parents[0]/ 'firebase_key.json'
 DATABASE_URL =  os.environ['FIREBASE_URL']
@@ -22,25 +23,37 @@ def add_user(user: User) -> None:
 
 def get_user_with_id(id: str) -> User:
     user = None
-    for key, value in db_ref.get().items():
-        if value['id'] == id:
-            user = User.from_dict(value)
-            break
-    return user
+    try:
+        for key, value in db_ref.get().items():
+            if value['id'] == id:
+                user = User.from_dict(value)
+                return user
+    except:
+        return user    
             
 def get_all_users():
     user_list = []
-    for key,value in db_ref.get().items():
-        user_list.append(User.from_dict(value))
+    try:
+        for key,value in db_ref.get().items():
+            user_list.append(User.from_dict(value))
+    except:
+        return user_list 
+    
 
 def update_user(id: str, **kwargs):
-   for key,value in db_ref.get().items():
-       if value['id'] == id:
-           db_ref.child(key).update(kwargs)
-           return
+    try:
+        for key,value in db_ref.get().items():
+            if value['id'] == id:
+                db_ref.child(key).update(kwargs)
+                return
+    except:
+        return
+
 
 def delete_user(id: str):
-    for key,value in db_ref.get().items():
-       if value['id'] == id:
-           db_ref.child(key).delete()
-           
+    try:
+        for key,value in db_ref.get().items():
+            if value['id'] == id:
+                db_ref.child(key).delete()
+    except:
+        return

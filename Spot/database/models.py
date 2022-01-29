@@ -23,8 +23,9 @@ class User:
 
     @classmethod
     def from_dict(cls, obj_dict: dict):
+        
         try:
-            return User(
+            return cls(
                 id=obj_dict['id'],
                 first_name=obj_dict['first_name'],
                 last_name=obj_dict['last_name'],
