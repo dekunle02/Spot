@@ -154,7 +154,7 @@ def first_name(update: Update, context: CallbackContext) -> int:
 def last_name(update: Update, context: CallbackContext) -> int:
     last_name = update.message.text.strip().capitalize()
     context.user_data["last_name"] = last_name
-    update.message.reply_text(text=f"So {first_name}, Replies.HOSPITAL_NAME_ASK", parse_mode=ParseMode.HTML)
+    update.message.reply_text(text=Replies.HOSPITAL_NAME_ASK, parse_mode=ParseMode.HTML)
     return HOSPITAL_NAME
 
 def hospital_name(update: Update, context: CallbackContext) -> int:
@@ -522,7 +522,6 @@ def run_bot():
     dispatcher.add_handler(samad_conversation_handler)
     dispatcher.add_handler(MessageHandler(Filters.text, general))
     dispatcher.add_error_handler(error)
-
     updater.start_polling()
     updater.idle()
     

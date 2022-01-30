@@ -42,7 +42,7 @@ Type /help to see how we do things here 😎"""
     FIRST_NAME_ASK = """We should have a formal introduction here or what do you think 😎
 Can you tell me your first name? e.g <b>Spot</b> 🙈"""
     LAST_NAME_ASK = "That's a lovely name 😊\nand your last name?"
-    HOSPITAL_NAME_ASK = "where do you work? e.g. <b>Nuffield Taunton</b>"
+    HOSPITAL_NAME_ASK = "Where do you work?\n e.g. <b>Nuffield Taunton</b>"
     SIGNATURE_ASK = "Send a picture of your signature. I will use this to sign your timesheets on your behalf."
 
 
