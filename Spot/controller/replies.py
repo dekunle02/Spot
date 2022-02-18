@@ -43,7 +43,7 @@ Type /help to see how we do things here 😎"""
 Can you tell me your first name? e.g <b>Spot</b> 🙈"""
     LAST_NAME_ASK = "That's a lovely name 😊\nand your last name?"
     HOSPITAL_NAME_ASK = "Where do you work?\n e.g. <b>Nuffield Taunton</b>"
-    SIGNATURE_ASK = "Send a picture of your signature. I will use this to sign your timesheets on your behalf./n/nThis is saved on your device and can be deleted from Telegram at any point."
+    SIGNATURE_ASK = "Send a picture of your signature. I will use this to sign your timesheets on your behalf./n/nThis is saved on your device and can be deleted from your Telegram at any point."
 
 
     START_DATE_ASK = """To begin, when did your shift start 📆? 
