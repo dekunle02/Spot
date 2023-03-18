@@ -1,38 +1,61 @@
-WELCOME_MESSAGE = """Hello, it’s good to have you here 🙂. My name is Spot🚀. I was created by Samad.
+#
+# COMMANDS
+#
+SETUP_COMMAND = "setup"
+EDIT_COMMAND = "edit"
+INFO_COMMAND = "info"
+HELP_COMMAND = "help"
+SPOT_COMMAND = "spot"
+CANCEL_COMMAND = "cancel"
+DELETE_COMMAND = "delete"
+SAM_COMMAND = "sam"
+DM_COMMAND = "dm"
+BC_COMMAND = "bc"
+
+
+#
+# OPTIONS
+#
+OPTION_NO = "no"
+OPTION_YES = "yes"
+
+# REPLIES
+#
+WELCOME_MESSAGE = f"""Hello, it’s good to have you here 🙂. My name is Spot🚀. I was created by Samad.
 I’m here to help you create your NES timesheet in a few minutes.
 
-To get started, type /setup
+To get started, type /{SETUP_COMMAND}
 You can cancel anytime by typing /cancel
 """
 IDLE_MESSAGE = "👋🏾\nType /help to see how to operate me\nType /spot to make a timesheet"
 ERROR_MESSAGE = "Something went wrong with my code while trying to process that 🥴🤒...\n I am going to get Samad to fix this 🏃🏾‍♂️"
-CANCEL_MESSAGE = """Maybe we can pick this up some other time 🥲 
-You can type always type /help to see how we do things here 😎"""
-HELP_MESSAGE = """🚨🚨🚨HELP MESSAGE🚨🚨🚨
+CANCEL_MESSAGE = f"""Maybe we can pick this up some other time 🥲 
+You can type always type /{HELP_COMMAND} to see how we do things here 😎"""
+HELP_MESSAGE = f"""🚨🚨🚨HELP MESSAGE🚨🚨🚨
 
 Just type /help and you will always get this help message👇
 
-📄 Type /spot to make a timesheet
+📄 Type /{SPOT_COMMAND} to make a timesheet
 
-🧑‍⚕️ Type /info to view your info
+🧑‍⚕️ Type /{INFO_COMMAND} to view your info
 
-✍️ Type /edit to change your info, e.g hospital name or signature
+✍️ Type /{EDIT_COMMAND} to change your info, e.g hospital name or signature
 
-🧹 Type /delete to delete all your info
+🧹 Type /{DELETE_COMMAND} to delete all your info
 
-💬 Type /sam to send Samad a message.
+💬 Type /{SAM_COMMAND} to send Samad a message.
 
 That easy!😎
 """
-UNKNOWN_USER_INFO_ASK = """💭 I don’t think I have any information about you yet
-Not to worry, type /setup to get started"""
+UNKNOWN_USER_INFO_ASK = f"""💭 I don’t think I have any information about you yet
+Not to worry, type /{SETUP_COMMAND} to get started"""
 
 SAMAD_ASK = "What would you like to tell Samad? 👀"
 SAMAD_THANKS = "I'll make sure he gets this 🏃🏾‍♂️🏃🏾‍♂️"
 
-ALREADY_SETUP_MESSAGE = """I already have your information.
-Type /info to check your info
-Type /help to see how I work
+ALREADY_SETUP_MESSAGE = f"""I already have your information.
+Type /{INFO_COMMAND} to check your info
+Type /{HELP_COMMAND} to see how I work
 """
 
 SETUP_COMPLETE_MESSAGE = """You are all set!🥳
@@ -99,3 +122,44 @@ DELETE_USER_SKIP = "Yayyy🕺🏾🕺🏾🕺🏾"
 
 TIMESHEET_AWAITING_MESSAGE = "....⚙️⚙️pRoCESSinG⚙️⚙️...."
 TIMESHEET_MESSAGE = "Here you go! 😎"
+
+
+#
+# CONVERSATION STATES
+#
+FIRST_NAME_STATE, LAST_NAME_STATE, HOSPITAL_NAME_STATE, SIGNATURE_STATE = range(0, 4)
+(
+    FIRST_NAME_EDIT_STATE,
+    FIRST_NAME_EDIT_PROMPT_STATE,
+    LAST_NAME_EDIT_STATE,
+    LAST_NAME_EDIT_PROMPT_STATE,
+    HOSPITAL_NAME_EDIT_STATE,
+    HOSPITAL_NAME_EDIT_PROMPT_STATE,
+    SIGNATURE_EDIT_STATE,
+    SIGNATURE_EDIT_PROMPT_STATE,
+) = range(4, 12)
+(
+    START_DATE_STATE,
+    START_TIME_STATE,
+    NUMBER_OF_DAYS_STATE,
+    END_TIME_STATE,
+    NIGHT_ADD_STATE,
+) = range(12, 17)
+NIGHT_DAY_STATE, NIGHT_TIME_STATE, NIGHT_DURATION_STATE, NIGHT_REASON_STATE = range(
+    17, 21
+)
+DELETE_USER_STATE = 21
+(
+    TIMESHEET_START_DATE_STATE,
+    TIMESHEET_START_TIME_STATE,
+    TIMESHEET_DAYS_STATE,
+    TIMESHEET_END_TIME_STATE,
+) = range(22, 26)
+(
+    NIGHT_PROMPT_STATE,
+    NIGHT_DAY_STATE,
+    NIGHT_TIME_STATE,
+    NIGHT_DURATION_STATE,
+    NIGHT_REASON_STATE,
+) = range(26, 31)
+SAM_STATE, SAM_MESSAGE_STATE = (31, 32)
