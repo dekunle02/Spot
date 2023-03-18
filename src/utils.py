@@ -7,27 +7,26 @@ from pyppeteer import launch
 from mako.lookup import TemplateLookup
 from telegram import Bot, File
 from database.models import TimeSheet
+from time import sleep
+from selenium import webdriver
 from dotenv import load_dotenv
 
+# from webdriver_manager.chrome import ChromeDriverManager
+# from webdriver_manager.firefox import GeckoDriverManager
 load_dotenv()
 
 TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
 DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 
-from time import sleep
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.firefox import GeckoDriverManager
-
-options = webdriver.FirefoxOptions()
-# options = webdriver.ChromeOptions()
-options.headless = True
-
 
 # this method uses selenium
 def _get_base64_string(html_string: str) -> str:
+    options = webdriver.FirefoxOptions()
+    # options = webdriver.ChromeOptions()
+    options.headless = True
+
     html_bs64 = base64.b64encode(html_string.encode("utf-8")).decode()
-    driver = webdriver.Firefox("", options=options)
+    driver = webdriver.Firefox(options=options)
     # driver = webdriver.Chrome(ChromeDriverManager(), options=options)
     driver.set_window_size(1366, 900)
     driver.get("data:text/html;base64, " + html_bs64)

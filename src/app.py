@@ -38,8 +38,6 @@ def help_handler(update: Update, context: CallbackContext):
 
 def general_handler(update: Update, context: CallbackContext) -> int:
     user = fire.get_user_with_id(update.message.from_user.id)
-    photo_string = utils.make_timesheet_photo(fire.supply_fake_timesheet())
-    print(photo_string)
     if user != None:
         update.message.reply_text(f"Hello {user.first_name} " + constants.IDLE_MESSAGE)
     else:
