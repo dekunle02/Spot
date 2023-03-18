@@ -28,7 +28,7 @@ options.headless = True
 def _get_base64_string(html_string: str) -> str:
     html_bs64 = base64.b64encode(html_string.encode("utf-8")).decode()
     # driver = webdriver.Firefox(options=options)
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(ChromeDriverManager(), options=options)
     driver.set_window_size(1366, 900)
     driver.get("data:text/html;base64, " + html_bs64)
     sleep(1)
