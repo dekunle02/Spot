@@ -19,16 +19,16 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
-# options = webdriver.FirefoxOptions()
-options = webdriver.ChromeOptions()
+options = webdriver.FirefoxOptions()
+# options = webdriver.ChromeOptions()
 options.headless = True
 
 
 # this method uses selenium
 def _get_base64_string(html_string: str) -> str:
     html_bs64 = base64.b64encode(html_string.encode("utf-8")).decode()
-    # driver = webdriver.Firefox(options=options)
-    driver = webdriver.Chrome(ChromeDriverManager(), options=options)
+    driver = webdriver.Firefox(options=options)
+    # driver = webdriver.Chrome(ChromeDriverManager(), options=options)
     driver.set_window_size(1366, 900)
     driver.get("data:text/html;base64, " + html_bs64)
     sleep(1)
