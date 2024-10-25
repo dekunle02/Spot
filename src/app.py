@@ -115,7 +115,10 @@ def bc_handler(update: Update, context: CallbackContext):
         return
     [command, msg] = received_message.split("*")
     for user in all_users:
-        context.bot.send_message(chat_id=user.id, text=f"Message from Samad 👇🏾\n{msg}")
+        try:
+            context.bot.send_message(chat_id=user.id, text=f"Message from Samad 👇🏾\n{msg}")
+        except:
+            pass
     context.bot.send_message(chat_id=MY_TELEGRAM_ID, text="Messages delivered")
 
 
