@@ -9,7 +9,13 @@ from .models import User, TimeSheet, NightDisturbance
 
 
 load_dotenv()
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "False"
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
+
+if DEVELOPMENT_MODE:
+    print("fire development mode")
+else:
+    print("fire prod mode")
+
 MY_TELEGRAM_ID = os.getenv("MY_TELEGRAM_ID")
 FIREBASE_KEY_DIR = Path(__file__).parents[0] / "firebase_key.json"
 DATABASE_URL = os.environ["FIREBASE_URL"]
@@ -41,7 +47,7 @@ def get_user_with_id(id: str) -> User:
 def get_all_users():
     user_list = []
     if DEVELOPMENT_MODE:
-        print("developement mode")
+        print("developement mode get all user")
         return [
             User(
                 first_name="Abdulsamad",

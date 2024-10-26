@@ -21,7 +21,8 @@ from dotenv import load_dotenv
 
 load_dotenv
 
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "False"
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
+
 if DEVELOPMENT_MODE:
     print("development telegram mode")
     TELEGRAM_TOKEN = os.getenv("TEST_TELEGRAM_TOKEN")
