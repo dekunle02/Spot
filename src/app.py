@@ -21,10 +21,12 @@ from dotenv import load_dotenv
 
 load_dotenv
 
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "False"
 if DEVELOPMENT_MODE:
+    print("development telegram mode")
     TELEGRAM_TOKEN = os.getenv("TEST_TELEGRAM_TOKEN")
 else:
+    print("production telegram mode")
     TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 MY_TELEGRAM_ID = os.getenv("MY_TELEGRAM_ID")
 
@@ -116,7 +118,9 @@ def bc_handler(update: Update, context: CallbackContext):
     [command, msg] = received_message.split("*")
     for user in all_users:
         try:
-            context.bot.send_message(chat_id=user.id, text=f"Message from Samad 👇🏾\n{msg}")
+            context.bot.send_message(
+                chat_id=user.id, text=f"Message from Samad 👇🏾\n{msg}"
+            )
         except:
             pass
     context.bot.send_message(chat_id=MY_TELEGRAM_ID, text="Messages delivered")

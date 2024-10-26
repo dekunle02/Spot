@@ -9,7 +9,7 @@ from .models import User, TimeSheet, NightDisturbance
 
 
 load_dotenv()
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "False"
 MY_TELEGRAM_ID = os.getenv("MY_TELEGRAM_ID")
 FIREBASE_KEY_DIR = Path(__file__).parents[0] / "firebase_key.json"
 DATABASE_URL = os.environ["FIREBASE_URL"]
@@ -33,13 +33,15 @@ def get_user_with_id(id: str) -> User:
             if value["id"] == id:
                 user = User.from_dict(value)
                 return user
-    except:
+    except Exception as e:
+        print("Exception:", e)
         return user
 
 
 def get_all_users():
     user_list = []
     if DEVELOPMENT_MODE:
+        print("developement mode")
         return [
             User(
                 first_name="Abdulsamad",
@@ -51,11 +53,13 @@ def get_all_users():
         ]
     try:
         user_pairs = list(db_ref.order_by_key().get().items())
+        # print("user_pairs::", user_pairs)
         for i, value in user_pairs:
             user = User.from_dict(value)
             user_list.append(user)
         return user_list
-    except:
+    except Exception as e:
+        print("exception:", e)
         return user_list
 
 
