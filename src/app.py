@@ -122,7 +122,14 @@ def bc_handler(update: Update, context: CallbackContext):
             context.bot.send_message(
                 chat_id=user.id, text=f"Message from Samad 👇🏾\n{msg}"
             )
-        except:
+            context.bot.send_message(
+                chat_id=MY_TELEGRAM_ID, text=f"Delivered to {user.first_name} {user.id}"
+            )
+        except Exception as e:
+            if user:
+                context.bot.send_message(
+                    chat_id=MY_TELEGRAM_ID, text=f"Not delivered to {user.first_name} {user.id} {e}"
+                )
             pass
     context.bot.send_message(chat_id=MY_TELEGRAM_ID, text="Messages delivered")
 

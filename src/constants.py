@@ -27,7 +27,9 @@ I’m here to help you create your NES timesheet in a few minutes.
 To get started, type /{SETUP_COMMAND}
 You can cancel anytime by typing /cancel
 """
-IDLE_MESSAGE = "👋🏾\nType /help to see how to operate me\nType /spot to make a timesheet"
+IDLE_MESSAGE = (
+    "👋🏾\nType /help to see how to operate me\nType /spot to make a timesheet"
+)
 ERROR_MESSAGE = "Something went wrong with my code while trying to process that 🥴🤒...\n I am going to get Samad to fix this 🏃🏾‍♂️"
 CANCEL_MESSAGE = f"""Maybe we can pick this up some other time 🥲 
 You can type always type /{HELP_COMMAND} to see how we do things here 😎"""
@@ -121,13 +123,7 @@ DELETE_USER_FINAL = "Sorry to see you go..😭"
 DELETE_USER_SKIP = "Yayyy🕺🏾🕺🏾🕺🏾"
 
 TIMESHEET_AWAITING_MESSAGE = "....⚙️⚙️pRoCESSinG⚙️⚙️...."
-TIMESHEET_MESSAGE = """Here you go! 😎
-Hello everyone,
-
-I want to extend my heartfelt thanks to each of you who has used Spot. I hope it has been as helpful for you as it once was for me. Unfortunately, the time has come to say goodbye, and I’ll be shutting Spot down on October 31st. I simply don’t have the time or resources needed to continue supporting and developing it.
-
-Thank you for all the messages and feedback over the years—it has meant so much to me. Wishing you all the best going forward.
-"""
+TIMESHEET_MESSAGE = """Here you go! 😎"""
 
 
 #
