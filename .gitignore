@@ -3,7 +3,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-firebase_key.json
 
 # Distribution / packaging
 .Python
