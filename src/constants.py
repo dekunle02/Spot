@@ -121,7 +121,13 @@ DELETE_USER_FINAL = "Sorry to see you go..😭"
 DELETE_USER_SKIP = "Yayyy🕺🏾🕺🏾🕺🏾"
 
 TIMESHEET_AWAITING_MESSAGE = "....⚙️⚙️pRoCESSinG⚙️⚙️...."
-TIMESHEET_MESSAGE = "Here you go! 😎"
+TIMESHEET_MESSAGE = """Here you go! 😎
+Hello everyone,
+
+I want to extend my heartfelt thanks to each of you who has used Spot. I hope it has been as helpful for you as it once was for me. Unfortunately, the time has come to say goodbye, and I’ll be shutting Spot down on October 31st. I simply don’t have the time or resources needed to continue supporting and developing it.
+
+Thank you for all the messages and feedback over the years—it has meant so much to me. Wishing you all the best going forward.
+"""
 
 
 #
